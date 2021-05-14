@@ -1,0 +1,44 @@
+{
+  "private": true,
+  "name": "TreePosTool",
+  "version": "0.1.0",
+  "description": "Tree positioning software",
+  "repository": {},
+  "author": "Alexander Evgrafov",
+  "license": "UNLICENSED",
+  "homepage": "",
+  "scripts": {
+    "watch": "webpack  --progress --colors --watch --env.develop",
+    "compile": "webpack  --progress --colors --env.develop",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^1.0.1",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^2.1.1",
+    "dotenv": "^8.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-notifier": "^1.7.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "dotenv-expand": "^5.1.0",
+    "es6-promise": "^4.2.8",
+    "interpolate-html-plugin": "^3.0.0",
+    "jquery": "^3.2",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
+    "lodash": "^4.17.15",
+    "path": "^0.12.7",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-mvx": "^3.0.0",
+    "ts-loader": "^8.0.11",
+    "type-r": "^3.0.13",
+    "typescript": "^4.0.5"
+  }
+}

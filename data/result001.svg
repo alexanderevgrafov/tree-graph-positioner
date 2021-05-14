@@ -1,0 +1,250 @@
+<svg id="canvas" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+    <g class="links">
+        <g class="link">
+            <line stroke="pink" id="ppp0__1" x1="269" y1="223" x2="330" y2="245"></line>
+            <text x="299" y="234">63.9</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__2" x1="269" y1="223" x2="268" y2="194"></line>
+            <text x="268" y="209">27.7</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__5" x1="269" y1="223" x2="151" y2="165"></line>
+            <text x="210" y="194">129</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__6" x1="269" y1="223" x2="154" y2="242"></line>
+            <text x="212" y="233">114.9</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__4" x1="269" y1="223" x2="234" y2="158"></line>
+            <text x="251" y="191">72.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__3" x1="269" y1="223" x2="289" y2="139"></line>
+            <text x="279" y="181">85</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__7" x1="269" y1="223" x2="372" y2="210"></line>
+            <text x="321" y="216">102.2</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__8" x1="269" y1="223" x2="387" y2="152"></line>
+            <text x="328" y="188">135.4</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp0__9" x1="269" y1="223" x2="433" y2="101"></line>
+            <text x="351" y="162">202.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp1__7" x1="330" y1="245" x2="372" y2="210"></line>
+            <text x="351" y="227">53.7</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp1__8" x1="330" y1="245" x2="387" y2="152"></line>
+            <text x="358" y="199">106.8</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp1__9" x1="330" y1="245" x2="433" y2="101"></line>
+            <text x="381" y="173">175.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp1__13" x1="330" y1="245" x2="214" y2="16"></line>
+            <text x="272" y="130">253.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp1__3" x1="330" y1="245" x2="289" y2="139"></line>
+            <text x="309" y="192">111.5</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp1__4" x1="330" y1="245" x2="234" y2="158"></line>
+            <text x="282" y="201">127.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp7__8" x1="372" y1="210" x2="387" y2="152"></line>
+            <text x="380" y="181">55.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp7__5" x1="372" y1="210" x2="151" y2="165"></line>
+            <text x="261" y="187">221.4</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp8__9" x1="387" y1="152" x2="433" y2="101"></line>
+            <text x="410" y="127">65.2</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp8__10" x1="387" y1="152" x2="348" y2="56"></line>
+            <text x="367" y="104">99.8</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp8__11" x1="387" y1="152" x2="328" y2="41"></line>
+            <text x="357" y="96">122.5</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp8__3" x1="387" y1="152" x2="289" y2="139"></line>
+            <text x="338" y="146">94.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp8__2" x1="387" y1="152" x2="268" y2="194"></line>
+            <text x="327" y="173">122.9</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp9__10" x1="433" y1="101" x2="348" y2="56"></line>
+            <text x="391" y="79">92.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp9__11" x1="433" y1="101" x2="328" y2="41"></line>
+            <text x="381" y="71">117.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp10__3" x1="348" y1="56" x2="289" y2="139"></line>
+            <text x="319" y="97">97</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp10__12" x1="348" y1="56" x2="248" y2="23"></line>
+            <text x="298" y="40">101.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp10__13" x1="348" y1="56" x2="214" y2="16"></line>
+            <text x="281" y="36">134.7</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp10__11" x1="348" y1="56" x2="328" y2="41"></line>
+            <text x="338" y="48">21.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp11__3" x1="328" y1="41" x2="289" y2="139"></line>
+            <text x="309" y="90">101.5</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp11__12" x1="328" y1="41" x2="248" y2="23"></line>
+            <text x="288" y="32">77.9</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp11__5" x1="328" y1="41" x2="151" y2="165"></line>
+            <text x="239" y="103">211.8</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp12__13" x1="248" y1="23" x2="214" y2="16"></line>
+            <text x="231" y="19">29.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp12__5" x1="248" y1="23" x2="151" y2="165"></line>
+            <text x="199" y="94">167.6</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp12__3" x1="248" y1="23" x2="289" y2="139"></line>
+            <text x="269" y="81">119</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp12__4" x1="248" y1="23" x2="234" y2="158"></line>
+            <text x="241" y="90">132</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp12__15" x1="248" y1="23" x2="146" y2="48"></line>
+            <text x="197" y="35">100.7</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp13__15" x1="214" y1="16" x2="146" y2="48"></line>
+            <text x="180" y="32">69.8</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp13__5" x1="214" y1="16" x2="151" y2="165"></line>
+            <text x="182" y="91">156.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp13__3" x1="214" y1="16" x2="289" y2="139"></line>
+            <text x="252" y="77">138.9</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp15__4" x1="146" y1="48" x2="234" y2="158"></line>
+            <text x="190" y="103">136.5</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp15__5" x1="146" y1="48" x2="151" y2="165"></line>
+            <text x="149" y="107">112.5</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp4__3" x1="234" y1="158" x2="289" y2="139"></line>
+            <text x="261" y="148">55</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp4__5" x1="234" y1="158" x2="151" y2="165"></line>
+            <text x="192" y="162">78.3</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp4__6" x1="234" y1="158" x2="154" y2="242"></line>
+            <text x="194" y="200">111.8</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp5__6" x1="151" y1="165" x2="154" y2="242"></line>
+            <text x="152" y="204">71.7</text>
+        </g>
+        <g class="link">
+            <line stroke="pink" id="ppp5__2" x1="151" y1="165" x2="268" y2="194"></line>
+            <text x="209" y="180">115.9</text>
+        </g>
+    </g>
+    <g class="nodes">
+        <g class="node">
+            <circle r="0" cx="269" cy="223"></circle>
+            <text x="269" y="223">house1</text>
+        </g>
+        <g class="node fixed">
+            <circle r="0" cx="330" cy="245"></circle>
+            <text x="330" y="245">house2</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="268" cy="194"></circle>
+            <text x="268" y="194">mpl</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="289" cy="139"></circle>
+            <text x="289" y="139">3</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="234" cy="158"></circle>
+            <text x="234" y="158">pis</text>
+        </g>
+        <g class="node">
+            <circle r="3" cx="151" cy="165"></circle>
+            <text x="151" y="165">db1</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="154" cy="242"></circle>
+            <text x="154" y="242">6</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="372" cy="210"></circle>
+            <text x="372" y="210">brch</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="387" cy="152"></circle>
+            <text x="387" y="152">8</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="433" cy="101"></circle>
+            <text x="433" y="101">9</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="348" cy="56"></circle>
+            <text x="348" y="56">10</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="328" cy="41"></circle>
+            <text x="328" y="41">11</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="248" cy="23"></circle>
+            <text x="248" y="23">12</text>
+        </g>
+        <g class="node">
+            <circle r="3" cx="214" cy="16"></circle>
+            <text x="214" y="16">db2</text>
+        </g>
+        <g class="node">
+            <circle r="2" cx="146" cy="48"></circle>
+            <text x="146" y="48">15</text>
+        </g>
+    </g>
+</svg>
