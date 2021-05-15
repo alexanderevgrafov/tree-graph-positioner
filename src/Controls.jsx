@@ -257,25 +257,27 @@ const DELTA_MOVE=50;
 
 */
 
-const DELTA_MOVE=5;
-const DELTA_ROT=2;
-const DELTA_ZOOM=0.1
+const DELTA_MOVE = 5;
+const DELTA_ROT = 2;
+const DELTA_ZOOM = 0.1
 
 const hndl = [
-  ['pause','Pause', s => s.stopped = !s.stopped],
-  ['addrandom','Add Rand', s => s.addRandom = !s.addRandom],
-  ['zoom_in','Zoom IN', s => s.t_zoom *= 1+DELTA_ZOOM],
-  ['zoom_out','Zoom Out', s => s.t_zoom *= 1-DELTA_ZOOM],
-  ['m_up','UP', s => s.t_dy -= DELTA_MOVE],
-  ['m_down','Down', s => s.t_dy += DELTA_MOVE],
-  ['m_left','Left', s => s.t_dx += DELTA_MOVE],
-  ['m_right','Right', s => s.t_dx -= DELTA_MOVE],
-  ['r_cw','CW', s => s.t_rot -= DELTA_ROT],
-  ['r_ccw','CCW', s => s.t_rot += DELTA_ROT],
+  ['addrandom', 'Add Rand', s => s.graph.addRandom = !s.graph.addRandom],
+  ['zoom_in', 'Zoom IN', s => s.t_zoom *= 1 + DELTA_ZOOM],
+  ['zoom_out', 'Zoom Out', s => s.t_zoom *= 1 - DELTA_ZOOM],
+  ['m_up', 'UP', s => s.t_dy -= DELTA_MOVE],
+  ['m_down', 'Down', s => s.t_dy += DELTA_MOVE],
+  ['m_left', 'Left', s => s.t_dx += DELTA_MOVE],
+  ['m_right', 'Right', s => s.t_dx -= DELTA_MOVE],
+  ['r_cw', 'CW', s => s.t_rot -= DELTA_ROT],
+  ['r_ccw', 'CCW', s => s.t_rot += DELTA_ROT],
 ]
 
-export const Controls = ({state})=>{
+export const Controls = ({state: s}) => {
   return <>
-    { _.map(hndl, ([id, name, cb])=><button key={id} className={id} onClick={e=>cb(state,e)}>{name}</button>)}
+    <button className='pause' onClick={e =>{
+      s.stopped = !s.stopped;
+    }}>{s.stopped ? 'Stopped' : 'Simulating'}</button>
+    {_.map(hndl, ([id, name, cb]) => <button key={id} className={id} onClick={e => cb(s, e)}>{name}</button>)}
   </>
 }

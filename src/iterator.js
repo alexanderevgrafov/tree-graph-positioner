@@ -265,6 +265,3 @@ const buttonHandlers = {
   })
 })();
 */
-export const iterator = ({state})=>{
-  return null
-}

@@ -265,30 +265,38 @@ const buttonHandlers = {
   })
 })();
 */
+const convert = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
+//const reConvert = x => x * 10;
+
 const Node = ({obj}) =>
   <>
-    <circle cx={obj.x} cy={obj.y} r={obj.r}/>
+    <circle cx={obj.x} cy={obj.y} r={obj.radius}/>
     <text x={obj.x} y={obj.y}>{obj.name || obj.id}</text>
   </>
 
-const Link = ({obj}) =>
-  <>
-    <line/>
-  </>
-  let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-//    let textPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
-  line.setAttributeNS(null, 'stroke', 'pink');
-  line.setAttributeNS(null, 'id', uid);
+const Link = ({obj}) => {
+  const {n1,n2} = obj;
+  const text = convert(obj.length, 10);
 
-
-  convert(this.length(), 10)
+  return <>
+    <line x1={n1.x} x2={n2.x} y1={n1.y} y2={n2.y}/>
+    <text x={(n1.x + n2.x) / 2} y={(n1.y + n2.y) / 2}>{text}</text>
+  </>;
 }
+//   let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+//   let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+// //    let textPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
+//   line.setAttributeNS(null, 'stroke', 'pink');
+//   line.setAttributeNS(null, 'id', uid);
+//
+//
+//  //
+// }
 
 const Graph = ({graph}) =>
   <g>
-    { graph.links.map(link=><Link obj={link} key={link.cid}/>) }
-    { graph.nodes.map(node=><Node obj={node} key={node.cid}/>) }
+    {graph.links.map(link => <Link obj={link} key={link.cid}/>)}
+    {graph.nodes.map(node => <Node obj={node} key={node.cid}/>)}
   </g>
 
 export const Canvas = ({state}) => {
