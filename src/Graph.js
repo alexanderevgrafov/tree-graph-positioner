@@ -18,6 +18,7 @@ class NodeModel extends Record {
     y: 0,
     links: LinkModel.Collection.Refs,
     fixed: false,
+    dragged: false,
   }
 
   __nx = 0;
@@ -30,11 +31,12 @@ class NodeModel extends Record {
   }
 
   calcNewPos(addRandom) {
+    const relatedLinks = this.getOwner().links.filter(link => link.n1 === this || link.n2 === this);
     let dx = 0;
     let dy = 0;
 
-    this.links.each(joint => {
-      const tension = joint.tension / (2 * FLEXIBILITY);  // *2 because tension shared between both sides of the joint
+    _.each(relatedLinks, joint => {
+      const tension = joint.tension() / (2 * FLEXIBILITY);  // *2 because tension shared between both sides of the joint
       const p = joint.n1 === this ? joint.n2 : joint.n1;
 
       dx += (this.x - p.x) * tension;
@@ -46,7 +48,7 @@ class NodeModel extends Record {
   }
 
   changePos() {
-    if (!this.fixed) {
+    if (!this.fixed && !this.dragged) {
       this.x = this.__nx;
       this.y = this.__ny;
     }
@@ -60,8 +62,7 @@ LinkModel.define({
     w: 0,
     type: '',
   },
-
-  get length() {
+  length() {
     const {n1, n2} = this;
 
     if (!n1 || !n2) {
@@ -73,12 +74,11 @@ LinkModel.define({
 
     return Math.max(0, Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) - r1 - r2);
   },
+  tension() {
+    const len = this.length();
 
-  get tension() {
-    const len = this.length;
-
-    if (!len || this.w === len) {
-      return 0;
+    if (!len) {
+      return 1;
     }
 
     return (this.w - len) / len;
@@ -90,7 +90,7 @@ export class GraphModel extends Record {
   static attributes = {
     nodes: NodeModel.Collection,
     links: LinkModel.Collection,
-    addRandom: true,
+    addRandom: false,
   }
 
   init() {
@@ -99,7 +99,7 @@ export class GraphModel extends Record {
 
       _.each(jsonData.links, link => {
         const n1 = this.nodes.get(link.n1);
-        const n2 = this.nodes.get(link.n1);
+        const n2 = this.nodes.get(link.n2);
 
         if (n1 && n2) {
           this.links.add({...link, n1, n2});
@@ -108,22 +108,21 @@ export class GraphModel extends Record {
         }
       })
 
-      this.nodes.each(node => {
-        const relatedLinks = this.links.filter(link => link.n1 === node || link.n2 === node);
-
-        if (!relatedLinks > length) {
-          console.warn('Node', node, 'has no related links')
-        } else {
-          node.links.reset(relatedLinks);
-        }
-      })
+      // this.nodes.each(node => {
+      //
+      //   if (!relatedLinks.length) {
+      //     console.warn('Node', node.id, 'has no related links')
+      //   } else {
+      //     node.links.add(relatedLinks.map(link=>link.id));
+      //   }
+      // })
     });
   }
 
   iterator() {
     this.transaction(() => {
-      _.each(this.nodes, node => node.calcNewPos(this.addRandom));
-      _.each(this.nodes, node => node.changePos());
+      this.nodes.each(node => node.calcNewPos(this.addRandom));
+      this.nodes.each(node => node.changePos());
     })
   }
 }

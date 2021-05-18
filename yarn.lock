@@ -3462,6 +3462,11 @@ valuelink@^1.0.0:
   resolved "https://registry.yarnpkg.com/valuelink/-/valuelink-1.6.2.tgz#1d1c4909d92ca77e37b5d3ab78bd6e2cef9f68fb"
   integrity sha512-Y7I9SNUfNH1fzu/NXM+4oHqSpks1sqZNTNdM0srOmM2irgYB1UciTZLB5DmSfmw+meeDQKRkMuJNkER861kOhg==
 
+valuelink@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/valuelink/-/valuelink-2.0.9.tgz#cb2649adabd3699fe89e28d20c50221993733153"
+  integrity sha512-pY6VM7UZOeNHREjWcfq1fSC7oxZUV/K5wxyb5sB4FH+DN7T8PegxsGd3Vn1n23gNY6sunnBjrObLs4MllKbKVQ==
+
 vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"

@@ -1,4 +1,7 @@
-import React from 'react-mvx'
+import {useContext, useEffect, useRef} from 'react'
+import React  from 'react-mvx'
+//import {useLink} from 'valuelink'
+import {StateContext} from './AppState';
 
 /*
 const FLEXIBILITY = 3; // small value - quick and unstable - large - slower nodes but stable result
@@ -266,22 +269,36 @@ const buttonHandlers = {
 })();
 */
 const convert = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
+const transfer = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
+
 //const reConvert = x => x * 10;
 
-const Node = ({obj}) =>
-  <>
-    <circle cx={obj.x} cy={obj.y} r={obj.radius}/>
-    <text x={obj.x} y={obj.y}>{obj.name || obj.id}</text>
-  </>
+const Node = ({obj, setClicked}) => {
+//  const obj = useLink(obj.x)
+  const x = transfer(obj.x);
+  const y = transfer(obj.y);
+
+  return <g className="node"
+     onClick={e => obj.fixed = !obj.fixed}
+     onMouseDown={() => setClicked(obj)}
+  >
+    <circle cx={x} cy={y} r={obj.radius * 3}/>
+    <text x={x} y={y}>{obj.name || obj.id}</text>
+  </g>
+}
 
 const Link = ({obj}) => {
-  const {n1,n2} = obj;
-  const text = convert(obj.length, 10);
+  const {n1, n2} = obj;
+  const text = convert(obj.length(), 10);
+  const x1 = transfer(n1.x);
+  const y1 = transfer(n1.y);
+  const x2 = transfer(n2.x);
+  const y2 = transfer(n2.y);
 
-  return <>
-    <line x1={n1.x} x2={n2.x} y1={n1.y} y2={n2.y}/>
-    <text x={(n1.x + n2.x) / 2} y={(n1.y + n2.y) / 2}>{text}</text>
-  </>;
+  return <g className="link">
+    <line x1={x1} x2={x2} y1={y1} y2={y2}/>
+    <text x={(x1 + x2) / 2} y={(y1 + y2) / 2}>{text}</text>
+  </g>;
 }
 //   let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 //   let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -293,22 +310,64 @@ const Link = ({obj}) => {
 //  //
 // }
 
-const Graph = ({graph}) =>
+const Graph = ({graph, onNodeClick}) =>
   <g>
-    {graph.links.map(link => <Link obj={link} key={link.cid}/>)}
-    {graph.nodes.map(node => <Node obj={node} key={node.cid}/>)}
+    {graph.links.map((link, i) => <Link obj={link} key={i}/>)}
+    {graph.nodes.map((node, i) => <Node obj={node} key={i} setClicked={onNodeClick}/>)}
   </g>
 
-export const Canvas = ({state}) => {
+export const Canvas = () => {
+  const state = useContext(StateContext);
+  const canvasEl = useRef();
   const {t_dx, t_dy, t_zoom, t_rot, graph} = state;
+  let clicked;
+  let pt;
+
+  useEffect(()=>{
+    pt = canvasEl.current.createSVGPoint();
+  })
+
+  function setDragged(node) {
+    if (node) {
+      node.dragged = true;
+      clicked = node;
+    } else {
+      if (clicked) {
+        clicked.dragged = false
+        clicked = null;
+      }
+    }
+  }
 
   return <div id="canvas-box">
-    <svg id="canvas" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+    <svg id="canvas" ref={canvasEl} viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg"
+         onMouseLeave={() => {
+           setDragged();
+           console.log('canvas out');
+         }}
+         onMouseUp={() => {
+           setDragged();
+           console.log('mouse up');
+         }}
+
+         onMouseMove={e => {
+           if (clicked) {
+             pt.x = e.clientX;
+             pt.y = e.clientY;
+             let svgP = pt.matrixTransform(canvas.getScreenCTM().inverse());
+
+             clicked.x = svgP.x;
+             clicked.y = svgP.y;
+
+             console.log('[' + e.clientX + 'x' + e.clientY + '] --> [' + clicked.x + 'x' + clicked.y + ']');
+           }
+         }}
+    >
       <g id="centerer" transform={'translate(250  125)'}>
         <g id="translate" transform={'translate(' + t_dx + ' ' + t_dy + ')'}>
           <g id="rotate" transform={'rotate(' + t_rot + ')'}>
             <g id="scale" transform={'scale(' + t_zoom + ')'}>
-              <Graph graph={graph}/>
+              <Graph graph={graph} onNodeClick={ setDragged }/>
             </g>
           </g>
         </g>

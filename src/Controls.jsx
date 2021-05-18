@@ -1,4 +1,6 @@
 import React from 'react-mvx'
+import {useContext} from 'react';
+import {StateContext} from './AppState';
 
 /*
 
@@ -273,7 +275,9 @@ const hndl = [
   ['r_ccw', 'CCW', s => s.t_rot += DELTA_ROT],
 ]
 
-export const Controls = ({state: s}) => {
+export const Controls = () => {
+  const s = useContext(StateContext);
+
   return <>
     <button className='pause' onClick={e =>{
       s.stopped = !s.stopped;
