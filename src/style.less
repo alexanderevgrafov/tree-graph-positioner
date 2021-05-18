@@ -11,22 +11,27 @@
 }
 
 text {
-  font-size: 6px;
+  font-size: 4px;
   stroke: none;
 }
 
 g.link {
   text {
-    fill: pink;
+    fill: brown;
   }
 
   line {
     stroke: pink;
+    stroke-width: .3;
   }
 
   &:hover {
     line {
       stroke: maroon;
+    }
+
+    text {
+      fill: red;
     }
   }
 }
@@ -34,13 +39,20 @@ g.link {
 g.node {
   text {
     fill: blue;
-    font-size: 6pt;
+    font-size: 4pt;
     text-shadow: 1px 1px 4px white;
   }
 
   &.fixed {
     text {
       fill: red;
+    }
+  }
+
+  &.dragged {
+    circle {
+      stroke-width: 10;
+      stroke: red;
     }
   }
 }

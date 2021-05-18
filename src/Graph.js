@@ -1,8 +1,7 @@
 import {define, predefine, Record, shared} from 'type-r';
-
+import {getLinkForce} from './LinkForce';
 const jsonData = require('../data/trees_02.json');
 
-const FLEXIBILITY = 3; // small value - quick and unstable - large - slower nodes but stable result
 
 @predefine
 export class LinkModel extends Record {
@@ -23,28 +22,23 @@ export class NodeModel extends Record {
   }
 
   get radius(){
-    return this.d / 5;
+    return this.d / 2;
   }
   __nx = 0;
   __ny = 0;
 
-  parse(json) {
-    json.radius = json.r || json.d / 2 || 10;
 
-    return json;
-  }
-
-  calcNewPos(addRandom) {
-    const relatedLinks = this.getOwner().links.filter(link => link.n1 === this || link.n2 === this);
+  calcNewPos(addRandom, relatedLinks) {
     let dx = 0;
     let dy = 0;
 
-    _.each(relatedLinks, joint => {
-      const tension = joint.tension() / (2 * FLEXIBILITY);  // *2 because tension shared between both sides of the joint
-      const p = joint.n1 === this ? joint.n2 : joint.n1;
+    _.each(relatedLinks, link => {
+      const force = getLinkForce(link, this);
 
-      dx += (this.x - p.x) * tension;
-      dy += (this.y - p.y) * tension;
+      if (force) {
+        dx += force.x;
+        dy += force.y;
+      }
     })
 
     this.__nx = this.x + dx + (addRandom ? Math.random() : 0);
@@ -65,6 +59,8 @@ LinkModel.define({
     n2: shared(NodeModel),
     weight: 0,
     type: '',
+    add:'',
+    ref: shared(LinkModel),
   },
   length() {
     const {n1, n2} = this;
@@ -94,7 +90,7 @@ export class GraphModel extends Record {
   static attributes = {
     nodes: NodeModel.Collection,
     links: LinkModel.Collection,
-    addRandom: true,
+    addRandom: false,
   }
 
   init() {
@@ -120,13 +116,30 @@ export class GraphModel extends Record {
       //     node.links.add(relatedLinks.map(link=>link.id));
       //   }
       // })
+
+      this.links.each(link => {
+        if (link.add) {
+          const refIds = link.add.split('-');
+          const ref = this.links.find(link=>(link.n1.id===refIds[0]&&link.n2.id===refIds[1])||(link.n1.id===refIds[1]&&link.n2.id===refIds[0]));
+          if (ref) {
+            link.ref = ref;
+          }
+        }
+      })
     });
   }
 
   iterator() {
     this.transaction(() => {
-      this.nodes.each(node => node.calcNewPos(this.addRandom));
+      this.nodes.each(node => {
+        const relatedLinks = this.links.filter(link => link.n1 === node || link.n2 === node);
+        node.calcNewPos(this.addRandom, relatedLinks)
+      });
       this.nodes.each(node => node.changePos());
     })
+  }
+
+  makeChaos(){
+    this.nodes.each(node => [node.x, node.y] = [ Math.random()*1000,Math.random()*1000]);
   }
 }

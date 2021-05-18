@@ -280,7 +280,10 @@ export const Controls = ({state: s}) => <>
   <button onClick={e =>s.transform.zoom *= 1 + DELTA_ZOOM*(e.shiftKey ? -1:1)}>Zoom [{Math.round(s.transform.zoom*100)/100}]</button>
   {/*<button onClick={e =>s.stopped = !s.stopped}>Simulation [{s.stopped ? 'n' : 'y'}]</button>*/}
   {/*<button onClick={e =>s.stopped = !s.stopped}>Simulation [{s.stopped ? 'n' : 'y'}]</button>*/}
-  <button onClick={e =>s.graph.addRandom = !s.graph.addRandom}>Random [{s.graph.addRandom ? 'n' : 'y'}]</button>
+  <button onClick={e =>s.graph.addRandom = !s.graph.addRandom}>Random [{s.graph.addRandom ? 'y' : 'n'}]</button>
+  <button onClick={e=>s.makeLsSnap()}>LS Snap</button>
+  <button onClick={e=>s.loadLsSnap()}>LS load</button>
+  <button onClick={e=>s.graph.makeChaos()}>Chaos</button>
 
   [{Math.round(s.transform.dx)} x {Math.round(s.transform.dy)}]
     {/*{_.map(hndl, ([id, name, cb]) => <button key={id} className={id} onClick={e => cb(s, e)}>{name}</button>)}*/}

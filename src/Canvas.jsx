@@ -1,8 +1,9 @@
 import React from 'react-mvx'
 import {createContext, useContext, useState, useEffect, useRef} from 'react'
 import {TransformContext} from './AppState'
+import cx from 'classnames'
 
-const convert = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
+const convert = (x, pres=10) =>  Math.round(x * pres) / pres;
 const transfer = (x, y) => {
   const t = useContext(TransformContext);
   return [t.dx + x * t.zoom, t.dy + y * t.zoom];
@@ -15,24 +16,25 @@ const DragContext = createContext(null);
 
 const Node = ({obj}) => {
   const setDragged = useContext(DragContext);
-  const [x, y] = transfer(obj.x, obj.y);
+  const t = useContext(TransformContext);
+  const {x,y,radius,dragged,fixed, name,id} = obj;
+  const [tx, ty] = transfer(x, y);
+  const r = radius * t.zoom;
 
-  return <g className="node"
-            onDoubleClick={e => obj.fixed = !obj.fixed}
+  return <g className={cx("node",{dragged,fixed})}
+            onDoubleClick={e => obj.fixed = !fixed}
             onMouseDown={e => {
               setDragged(obj);
               e.stopPropagation();
             }}
   >
-    <circle cx={x} cy={y} r={obj.radius / 10}/>
-    <text x={x + 3} y={y - 3}>{obj.name || obj.id}</text>
-    {obj.dragged ? <circle cx={x} cy={y} r={obj.radius / 5} fill="none" stroke="red"/> : null}
-    {obj.fixed ? <circle cx={x} cy={y} r={obj.radius / 5} fill="#ffff0050" stroke="none"/> : null}
+    <circle cx={tx} cy={ty} r={r}/>
+    <text x={tx + 1} y={ty - 1}>{name || id}</text>
   </g>
 }
 const Link = ({obj}) => {
   const {n1, n2} = obj;
-  const text = convert(obj.length(), 10);
+  const text = convert(obj.length(), 1);
   const [x1, y1] = transfer(n1.x, n1.y);
   const [x2, y2] = transfer(n2.x, n2.y);
 
@@ -54,11 +56,6 @@ export const Canvas = ({state}) => {
   const [clicked, setDragNode] = useState(null);
   const [canvasDrag, setCanvasDrag] = useState(null);
   const {graph} = state;
-  let pt;
-
-  useEffect(() => {
-    pt = canvasEl.current.createSVGPoint();
-  })
 
   function setDragged(node) {
     if (node) {
@@ -84,6 +81,7 @@ export const Canvas = ({state}) => {
          onMouseDown={e => setCanvasDrag([e.clientX, e.clientY])}
          onMouseMove={e => {
            if (clicked) {
+             let pt = canvasEl.current.createSVGPoint();
              pt.x = e.clientX;
              pt.y = e.clientY;
              let svgP = pt.matrixTransform(canvas.getScreenCTM().inverse());
