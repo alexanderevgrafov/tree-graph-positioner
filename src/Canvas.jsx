@@ -1,377 +1,110 @@
-import {useContext, useEffect, useRef} from 'react'
-import React  from 'react-mvx'
-//import {useLink} from 'valuelink'
-import {StateContext} from './AppState';
-
-/*
-const FLEXIBILITY = 3; // small value - quick and unstable - large - slower nodes but stable result
-const OriginalJson = require('../data/trees.json');
+import React from 'react-mvx'
+import {createContext, useContext, useState, useEffect, useRef} from 'react'
+import {TransformContext} from './AppState'
 
 const convert = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
-const reConvert = x => x * 10;
-
-let json = OriginalJson;
-let stopped = false;
-let addRandom = true;
-const defaultTrans = {
-  zoom:1,
-  dx:0,
-  dy:0,
-  rot:0,
+const transfer = (x, y) => {
+  const t = useContext(TransformContext);
+  return [t.dx + x * t.zoom, t.dy + y * t.zoom];
 };
-const trans = defaultTrans;
-
-class Node {
-  constructor(graph, obj) {
-    Object.assign(this, obj);
-
-    this.graph = graph;
-
-    this.x = this.x || 250 //+ (Math.random() * 1000 - 500);
-    this.y = this.y || 250 //+ (Math.random() * 1000 - 500);
-
-    this.radius = this.r || this.d / 2 || 10;
-
-    let group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    group.setAttributeNS(null, 'class', 'node');
-    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.textContent = this.name || this.id;
-    circle.setAttributeNS(null, 'r', convert(this.radius));
-    group.appendChild(circle)
-    group.appendChild(text)
-    this.elem = group;
-    this.graph.canvasNodes.appendChild(this.elem);
-
-    group.onclick = e => {
-      this.fixed = !this.fixed;
-      this.elem.setAttributeNS(null, 'class', 'node' + (this.fixed ? ' fixed' : ''));
-    }
-
-    group.onmousedown = () => this.graph.clicked = this;
-  }
-
-  calcNewPos() {
-    const joints = this.getLinks();
-    let dx = 0;
-    let dy = 0;
-
-    _.each(joints, joint => {
-      const tension = joint.tension() / (2 * FLEXIBILITY);  // *2 because tension shared between both sides of the joint
-      const p = joint.p1 === this ? joint.p2 : joint.p1;
-
-      dx += (this.x - p.x) * tension;
-      dy += (this.y - p.y) * tension;
-    })
-
-    this.__nx = this.x + dx + (addRandom ? Math.random() : 0);
-    this.__ny = this.y + dy + (addRandom ? Math.random() : 0);
-  }
-
-  getLinks() {
-    return this.graph.links.filter(link => link.p1 === this || link.p2 === this);
-  }
-
-  changePos() {
-    if (!this.fixed) {
-      this.x = this.__nx;
-      this.y = this.__ny;
-    }
-  }
-
-  render() {
-    let circle = this.elem.getElementsByTagName('circle')[0];
-
-    if (circle) {
-      let text = this.elem.getElementsByTagName('text')[0];
-
-      circle.setAttributeNS(null, 'cx', convert(this.x));
-      circle.setAttributeNS(null, 'cy', convert(this.y));
-
-      if (text) {
-        text.setAttributeNS(null, 'x', convert(this.x));
-        text.setAttributeNS(null, 'y', convert(this.y));
-      }
-    }
-  }
+const transferBack = (x, y, t) => {
+  return [(x - t.dx) / t.zoom, (y - t.dy) / t.zoom];
 }
 
-class Link {
-  constructor(graph, obj) {
-    Object.assign(this, obj);
+const DragContext = createContext(null);
 
-    this.graph = graph;
-
-    this.p1 = graph.getNode(this.n1);
-    this.p2 = graph.getNode(this.n2);
-
-    const uid = 'ppp' + this.n1 + '__' + this.n2;
-
-    let group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    group.setAttributeNS(null, 'class', 'link');
-
-    let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-//    let textPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
-    line.setAttributeNS(null, 'stroke', 'pink');
-    line.setAttributeNS(null, 'id', uid);
-//    textPath.setAttributeNS(null, 'href', '#' + uid);
-//    textPath.textContent = uid;
-//    text.appendChild(textPath)
-    group.appendChild(line)
-    group.appendChild(text)
-    this.elem = group;
-    this.graph.canvasLinks.appendChild(this.elem);
-  }
-
-  length() {
-    return Math.max(0, Math.sqrt((this.p1.x - this.p2.x) * (this.p1.x - this.p2.x) + (this.p1.y - this.p2.y) * (this.p1.y - this.p2.y))
-      - this.p1.radius - this.p2.radius);
-  }
-
-  tension() {
-    const len = this.length();
-
-    if (!len || this.w === len) {
-      return 0;
-    }
-
-    return (this.w - len) / len;
-  }
-
-  render() {
-    let line = this.elem.getElementsByTagName('line')[0];
-
-    if (line) {
-      let text = this.elem.getElementsByTagName('text')[0];
-
-      line.setAttributeNS(null, 'x1', convert(this.p1.x));
-      line.setAttributeNS(null, 'y1', convert(this.p1.y));
-      line.setAttributeNS(null, 'x2', convert(this.p2.x));
-      line.setAttributeNS(null, 'y2', convert(this.p2.y));
-
-      if (text) {
-        text.setAttributeNS(null, 'x', convert((this.p2.x + this.p1.x) / 2));
-        text.setAttributeNS(null, 'y', convert((this.p2.y + this.p1.y) / 2));
-        text.textContent = convert(this.length(), 10);
-      }
-    }
-  }
-}
-
-class Graph {
-  constructor(canvas) {
-    const pt = canvas.createSVGPoint();
-
-    this.nodes = [];
-    this.links = [];
-
-    this.canvasNodes = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    this.canvasNodes.setAttributeNS(null, 'class', 'nodes');
-    this.canvasLinks = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    this.canvasLinks.setAttributeNS(null, 'class', 'links');
-
-    canvas.appendChild(this.canvasLinks);
-    canvas.appendChild(this.canvasNodes);
-
-    canvas.onmouseleave = () => {
-      this.clicked = null;
-      console.log('canvas out');
-    }
-    canvas.onmouseup = () => {
-      this.clicked = null;
-      console.log('mouse up');
-    }
-
-    canvas.onmousemove = e => {
-      if (this.clicked) {
-        pt.x = e.clientX;
-        pt.y = e.clientY;
-        let svgP = pt.matrixTransform(canvas.getScreenCTM().inverse());
-
-        this.clicked.x = reConvert(svgP.x);
-        this.clicked.y = reConvert(svgP.y);
-
-        console.log('[' + e.clientX + 'x' + e.clientY + '] --> [' + this.clicked.x + 'x' + this.clicked.y + ']');
-
-        this.clicked.render();
-      }
-    }
-  }
-
-  addNode(obj) {
-    let node = new Node(this, obj);
-    this.nodes.push(node);
-  }
-
-  addLink(obj) {
-    let link = new Link(this, obj);
-    this.links.push(link);
-  }
-
-  getNode(id) {
-    return _.find(this.nodes, node => node.id === id);
-  }
-
-  flexTick() {
-    _.each(this.nodes, node => node.calcNewPos());
-    _.each(this.nodes, node => node.changePos());
-  }
-
-  render() {
-    _.each(this.links, link => link.render());
-    _.each(this.nodes, node => node.render());
-  }
-}
-
-const graph = new Graph(document.getElementById('canvas'));
-
-function nextStep() {
-  graph.flexTick()
-  graph.render();
-
-  if (!stopped) {
-    startStep();
-  }
-}
-
-function startStep() {
-  setTimeout(nextStep, 200);
-}
-
-const DELTA_MOVE=50;
-const buttonHandlers = {
-  pause:() => !( stopped = !stopped) && nextStep(),
-  addrandom: () => addRandom = !addRandom,
-  zoom_in: ()=>trans.zoom*=0.8,
-  zoom_out: ()=>trans.zoom*=1.2,
-  m_up: ()=>trans.dy-=DELTA_MOVE,
-  m_down: ()=>trans.dy+=DELTA_MOVE,
-  m_left: ()=>trans.dx+=DELTA_MOVE,
-  m_right: ()=>trans.dx-=DELTA_MOVE,
-  r_cw:()=>trans.
-}
-
-(function () {
-  _.each(json.nodes, node => {
-    graph.addNode(node);
-  })
-  _.each(json.links, link => {
-    graph.addLink(link);
-  })
-
-  graph.render();
-  startStep();
-
-  _.each(buttonHandlers, (fn, key)=>{
-    $('#' + key).click(fn)
-  })
-})();
-*/
-const convert = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
-const transfer = (x, pres) => !pres ? Math.round(x / 10) : Math.round(x * pres / 10) / pres;
-
-//const reConvert = x => x * 10;
-
-const Node = ({obj, setClicked}) => {
-//  const obj = useLink(obj.x)
-  const x = transfer(obj.x);
-  const y = transfer(obj.y);
+const Node = ({obj}) => {
+  const setDragged = useContext(DragContext);
+  const [x, y] = transfer(obj.x, obj.y);
 
   return <g className="node"
-     onClick={e => obj.fixed = !obj.fixed}
-     onMouseDown={() => setClicked(obj)}
+            onDoubleClick={e => obj.fixed = !obj.fixed}
+            onMouseDown={e => {
+              setDragged(obj);
+              e.stopPropagation();
+            }}
   >
-    <circle cx={x} cy={y} r={obj.radius * 3}/>
-    <text x={x} y={y}>{obj.name || obj.id}</text>
+    <circle cx={x} cy={y} r={obj.radius / 10}/>
+    <text x={x + 3} y={y - 3}>{obj.name || obj.id}</text>
+    {obj.dragged ? <circle cx={x} cy={y} r={obj.radius / 5} fill="none" stroke="red"/> : null}
+    {obj.fixed ? <circle cx={x} cy={y} r={obj.radius / 5} fill="#ffff0050" stroke="none"/> : null}
   </g>
 }
-
 const Link = ({obj}) => {
   const {n1, n2} = obj;
   const text = convert(obj.length(), 10);
-  const x1 = transfer(n1.x);
-  const y1 = transfer(n1.y);
-  const x2 = transfer(n2.x);
-  const y2 = transfer(n2.y);
+  const [x1, y1] = transfer(n1.x, n1.y);
+  const [x2, y2] = transfer(n2.x, n2.y);
 
   return <g className="link">
     <line x1={x1} x2={x2} y1={y1} y2={y2}/>
     <text x={(x1 + x2) / 2} y={(y1 + y2) / 2}>{text}</text>
   </g>;
 }
-//   let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-//   let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-// //    let textPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
-//   line.setAttributeNS(null, 'stroke', 'pink');
-//   line.setAttributeNS(null, 'id', uid);
-//
-//
-//  //
-// }
 
-const Graph = ({graph, onNodeClick}) =>
+
+const Graph = ({graph}) =>
   <g>
     {graph.links.map((link, i) => <Link obj={link} key={i}/>)}
-    {graph.nodes.map((node, i) => <Node obj={node} key={i} setClicked={onNodeClick}/>)}
+    {graph.nodes.map((node, i) => <Node obj={node} key={i}/>)}
   </g>
 
-export const Canvas = () => {
-  const state = useContext(StateContext);
+export const Canvas = ({state}) => {
   const canvasEl = useRef();
-  const {t_dx, t_dy, t_zoom, t_rot, graph} = state;
-  let clicked;
+  const [clicked, setDragNode] = useState(null);
+  const [canvasDrag, setCanvasDrag] = useState(null);
+  const {graph} = state;
   let pt;
 
-  useEffect(()=>{
+  useEffect(() => {
     pt = canvasEl.current.createSVGPoint();
   })
 
   function setDragged(node) {
     if (node) {
       node.dragged = true;
-      clicked = node;
+      setDragNode(node);
     } else {
       if (clicked) {
         clicked.dragged = false
-        clicked = null;
+        setDragNode(null);
       }
     }
   }
 
+  function stopDrag() {
+    setDragged();
+    setCanvasDrag(null);
+  }
+
   return <div id="canvas-box">
     <svg id="canvas" ref={canvasEl} viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg"
-         onMouseLeave={() => {
-           setDragged();
-           console.log('canvas out');
-         }}
-         onMouseUp={() => {
-           setDragged();
-           console.log('mouse up');
-         }}
-
+         onMouseLeave={stopDrag}
+         onMouseUp={stopDrag}
+         onMouseDown={e => setCanvasDrag([e.clientX, e.clientY])}
          onMouseMove={e => {
            if (clicked) {
              pt.x = e.clientX;
              pt.y = e.clientY;
              let svgP = pt.matrixTransform(canvas.getScreenCTM().inverse());
 
-             clicked.x = svgP.x;
-             clicked.y = svgP.y;
-
-             console.log('[' + e.clientX + 'x' + e.clientY + '] --> [' + clicked.x + 'x' + clicked.y + ']');
+             [clicked.x, clicked.y] = transferBack(svgP.x, svgP.y, state.transform);
+             //    console.log('[' + e.clientX + 'x' + e.clientY + '] --> [' + clicked.x + 'x' + clicked.y + ']');
+           } else if (canvasDrag) {
+            // const [dx, dy] = transferBack(e.clientX - canvasDrag[0], e.clientY - canvasDrag[1], state.transform);
+             const [dx, dy] = [e.clientX - canvasDrag[0], e.clientY - canvasDrag[1]];
+             const {zoom} = state.transform;
+             state.transform.dx += dx*zoom;
+             state.transform.dy += dy*zoom;
+             setCanvasDrag([e.clientX, e.clientY]);
            }
          }}
     >
-      <g id="centerer" transform={'translate(250  125)'}>
-        <g id="translate" transform={'translate(' + t_dx + ' ' + t_dy + ')'}>
-          <g id="rotate" transform={'rotate(' + t_rot + ')'}>
-            <g id="scale" transform={'scale(' + t_zoom + ')'}>
-              <Graph graph={graph} onNodeClick={ setDragged }/>
-            </g>
-          </g>
-        </g>
-      </g>
+      <DragContext.Provider value={setDragged}>
+        <TransformContext.Provider value={state.transform}>
+          <Graph graph={graph}/>
+        </TransformContext.Provider>
+      </DragContext.Provider>
     </svg>
   </div>
 }

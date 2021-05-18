@@ -1,19 +1,20 @@
 import {define, predefine, Record, shared} from 'type-r';
 
-const jsonData = require('../data/test_data.json');
+const jsonData = require('../data/trees_02.json');
 
 const FLEXIBILITY = 3; // small value - quick and unstable - large - slower nodes but stable result
 
 @predefine
-class LinkModel extends Record {
+export class LinkModel extends Record {
 }
 
 @define
-class NodeModel extends Record {
+export class NodeModel extends Record {
   static attributes = {
     id: '',
     name: '',
-    radius: 1,
+    d: 1,
+    type: '',
     x: 0,
     y: 0,
     links: LinkModel.Collection.Refs,
@@ -21,6 +22,9 @@ class NodeModel extends Record {
     dragged: false,
   }
 
+  get radius(){
+    return this.d / 5;
+  }
   __nx = 0;
   __ny = 0;
 
@@ -59,7 +63,7 @@ LinkModel.define({
   attributes: {
     n1: shared(NodeModel),
     n2: shared(NodeModel),
-    w: 0,
+    weight: 0,
     type: '',
   },
   length() {
@@ -81,7 +85,7 @@ LinkModel.define({
       return 1;
     }
 
-    return (this.w - len) / len;
+    return (this.weight - len) / len;
   }
 })
 
@@ -90,7 +94,7 @@ export class GraphModel extends Record {
   static attributes = {
     nodes: NodeModel.Collection,
     links: LinkModel.Collection,
-    addRandom: false,
+    addRandom: true,
   }
 
   init() {

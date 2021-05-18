@@ -265,23 +265,23 @@ const DELTA_ZOOM = 0.1
 
 const hndl = [
   ['addrandom', 'Add Rand', s => s.graph.addRandom = !s.graph.addRandom],
-  ['zoom_in', 'Zoom IN', s => s.t_zoom *= 1 + DELTA_ZOOM],
-  ['zoom_out', 'Zoom Out', s => s.t_zoom *= 1 - DELTA_ZOOM],
-  ['m_up', 'UP', s => s.t_dy -= DELTA_MOVE],
-  ['m_down', 'Down', s => s.t_dy += DELTA_MOVE],
-  ['m_left', 'Left', s => s.t_dx += DELTA_MOVE],
-  ['m_right', 'Right', s => s.t_dx -= DELTA_MOVE],
-  ['r_cw', 'CW', s => s.t_rot -= DELTA_ROT],
-  ['r_ccw', 'CCW', s => s.t_rot += DELTA_ROT],
+  ['zoom_in', 'Zoom IN', s => s.transform.zoom *= 1 + DELTA_ZOOM],
+  ['zoom_out', 'Zoom Out', s => s.transform.zoom *= 1 - DELTA_ZOOM],
+  ['m_up', 'UP', s => s.transform.dy -= DELTA_MOVE],
+  ['m_down', 'Down', s => s.transform.dy += DELTA_MOVE],
+  ['m_left', 'Left', s => s.transform.dx -= DELTA_MOVE],
+  ['m_right', 'Right', s => s.transform.dx += DELTA_MOVE],
+  // ['r_cw', 'CW', s => s.t_rot -= DELTA_ROT],
+  // ['r_ccw', 'CCW', s => s.t_rot += DELTA_ROT],
 ]
 
-export const Controls = () => {
-  const s = useContext(StateContext);
+export const Controls = ({state: s}) => <>
+    <button  onClick={e =>s.stopped = !s.stopped}>Simulation [{s.stopped ? 'n' : 'y'}]</button>
+  <button onClick={e =>s.transform.zoom *= 1 + DELTA_ZOOM*(e.shiftKey ? -1:1)}>Zoom [{Math.round(s.transform.zoom*100)/100}]</button>
+  {/*<button onClick={e =>s.stopped = !s.stopped}>Simulation [{s.stopped ? 'n' : 'y'}]</button>*/}
+  {/*<button onClick={e =>s.stopped = !s.stopped}>Simulation [{s.stopped ? 'n' : 'y'}]</button>*/}
+  <button onClick={e =>s.graph.addRandom = !s.graph.addRandom}>Random [{s.graph.addRandom ? 'n' : 'y'}]</button>
 
-  return <>
-    <button className='pause' onClick={e =>{
-      s.stopped = !s.stopped;
-    }}>{s.stopped ? 'Stopped' : 'Simulating'}</button>
-    {_.map(hndl, ([id, name, cb]) => <button key={id} className={id} onClick={e => cb(s, e)}>{name}</button>)}
+  [{Math.round(s.transform.dx)} x {Math.round(s.transform.dy)}]
+    {/*{_.map(hndl, ([id, name, cb]) => <button key={id} className={id} onClick={e => cb(s, e)}>{name}</button>)}*/}
   </>
-}
