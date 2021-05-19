@@ -32,6 +32,7 @@ export class AppState extends Record {
     this.graph.init()
 
     this.onStartStop();
+    this.loadLsSnap();
   }
 
   onStartStop() {

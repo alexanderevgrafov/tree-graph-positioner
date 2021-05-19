@@ -1,13 +1,33 @@
+.absFiller {
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;right:0;
+
+}
+
+#wrapper {
+  .absFiller;
+}
+
+#controls {
+  position:absolute;
+  bottom:5px;
+  left:5px;
+}
+
+@media print {
+  #controls {
+    display: none;
+  }
+}
+
 #canvas-box {
-  width: 100%;
-  height: 600px;
-  background-color: #ff0;
+  .absFiller;
 }
 
 #canvas {
   width: 100%;
-  background-color: #eee;
-
 }
 
 text {

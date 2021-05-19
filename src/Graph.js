@@ -1,6 +1,7 @@
 import {define, predefine, Record, shared} from 'type-r';
 import {getLinkForce} from './LinkForce';
 const jsonData = require('../data/trees_02.json');
+//const jsonData = require('../data/test_data.json');
 
 
 @predefine
@@ -19,6 +20,7 @@ export class NodeModel extends Record {
     links: LinkModel.Collection.Refs,
     fixed: false,
     dragged: false,
+    debugJsx: null,
   }
 
   get radius(){
@@ -91,6 +93,7 @@ export class GraphModel extends Record {
     nodes: NodeModel.Collection,
     links: LinkModel.Collection,
     addRandom: false,
+    showDelta:false,
   }
 
   init() {

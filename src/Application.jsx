@@ -15,10 +15,10 @@ export class Application extends React.Component {
   static state = AppState;
 
   render() {
-    return <>
+    return <div id='wrapper'>
       <Canvas state={this.state}/>
       <Controls state={this.state}/>
-    </>
+    </div>
   }
 }
 

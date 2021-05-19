@@ -4,11 +4,11 @@ import {TransformContext} from './AppState'
 import cx from 'classnames'
 
 const convert = (x, pres=10) =>  Math.round(x * pres) / pres;
-const transfer = (x, y) => {
+export const transfer = (x, y) => {
   const t = useContext(TransformContext);
   return [t.dx + x * t.zoom, t.dy + y * t.zoom];
 };
-const transferBack = (x, y, t) => {
+export const transferBack = (x, y, t) => {
   return [(x - t.dx) / t.zoom, (y - t.dy) / t.zoom];
 }
 
@@ -21,6 +21,16 @@ const Node = ({obj}) => {
   const [tx, ty] = transfer(x, y);
   const r = radius * t.zoom;
 
+  let debugLine = null;
+
+  if (obj.debugJsx) {
+    const [a,b,tx,ty] = obj.debugJsx;
+    const [dx1,dy1] = transfer(a,b);
+    const [dx2,dy2] = transfer(tx,ty);
+
+    debugLine = <><line x1={dx1} y1={dy1} x2={dx2} y2={dy2} stroke='blue' width=".3"/><circle cx={dx2} cy={dy2} r={5} fill='none' stroke='red'/></>
+  }
+
   return <g className={cx("node",{dragged,fixed})}
             onDoubleClick={e => obj.fixed = !fixed}
             onMouseDown={e => {
@@ -30,11 +40,12 @@ const Node = ({obj}) => {
   >
     <circle cx={tx} cy={ty} r={r}/>
     <text x={tx + 1} y={ty - 1}>{name || id}</text>
+    { debugLine }
   </g>
 }
-const Link = ({obj}) => {
+const Link = ({obj, showDelta}) => {
   const {n1, n2} = obj;
-  const text = convert(obj.length(), 1);
+  const text = convert(showDelta ? obj.tension()*obj.length() : obj.length(), 1);
   const [x1, y1] = transfer(n1.x, n1.y);
   const [x2, y2] = transfer(n2.x, n2.y);
 
@@ -44,10 +55,9 @@ const Link = ({obj}) => {
   </g>;
 }
 
-
 const Graph = ({graph}) =>
   <g>
-    {graph.links.map((link, i) => <Link obj={link} key={i}/>)}
+    {graph.links.map((link, i) => <Link obj={link} showDelta={graph.showDelta} key={i}/>)}
     {graph.nodes.map((node, i) => <Node obj={node} key={i}/>)}
   </g>
 
