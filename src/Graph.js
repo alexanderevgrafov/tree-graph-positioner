@@ -1,8 +1,7 @@
 import {define, predefine, Record, shared} from 'type-r';
 import {getLinkForce} from './LinkForce';
-const jsonData = require('../data/trees_02.json');
-//const jsonData = require('../data/test_data.json');
-
+//const jsonData = require('../data/trees_02.json');
+const jsonData = require('../data/test_data.json');
 
 @predefine
 export class LinkModel extends Record {
@@ -110,15 +109,6 @@ export class GraphModel extends Record {
           console.error('Link', link, 'node(s) not found:', n1, n2)
         }
       })
-
-      // this.nodes.each(node => {
-      //
-      //   if (!relatedLinks.length) {
-      //     console.warn('Node', node.id, 'has no related links')
-      //   } else {
-      //     node.links.add(relatedLinks.map(link=>link.id));
-      //   }
-      // })
 
       this.links.each(link => {
         if (link.add) {

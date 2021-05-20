@@ -21,15 +21,15 @@ const Node = ({obj}) => {
   const [tx, ty] = transfer(x, y);
   const r = radius * t.zoom;
 
-  let debugLine = null;
-
-  if (obj.debugJsx) {
-    const [a,b,tx,ty] = obj.debugJsx;
-    const [dx1,dy1] = transfer(a,b);
-    const [dx2,dy2] = transfer(tx,ty);
-
-    debugLine = <><line x1={dx1} y1={dy1} x2={dx2} y2={dy2} stroke='blue' width=".3"/><circle cx={dx2} cy={dy2} r={5} fill='none' stroke='red'/></>
-  }
+  // let debugLine = null;
+  //
+  // if (obj.debugJsx) {
+  //   const [a,b,tx,ty] = obj.debugJsx;
+  //   const [dx1,dy1] = transfer(a,b);
+  //   const [dx2,dy2] = transfer(tx,ty);
+  //
+  //   debugLine = <><line x1={dx1} y1={dy1} x2={dx2} y2={dy2} stroke='blue' width=".3"/><circle cx={dx2} cy={dy2} r={5} fill='none' stroke='red'/></>
+  // }
 
   return <g className={cx("node",{dragged,fixed})}
             onDoubleClick={e => obj.fixed = !fixed}
@@ -40,12 +40,14 @@ const Node = ({obj}) => {
   >
     <circle cx={tx} cy={ty} r={r}/>
     <text x={tx + 1} y={ty - 1}>{name || id}</text>
-    { debugLine }
-  </g>
+
+  </g>;
+
+  //{ debugLine }
 }
 const Link = ({obj, showDelta}) => {
   const {n1, n2} = obj;
-  const text = convert(showDelta ? obj.tension()*obj.length() : obj.length(), 1);
+  const text = convert(showDelta ? -obj.tension()*obj.length() : obj.length(), 1);
   const [x1, y1] = transfer(n1.x, n1.y);
   const [x2, y2] = transfer(n2.x, n2.y);
 
@@ -97,9 +99,7 @@ export const Canvas = ({state}) => {
              let svgP = pt.matrixTransform(canvas.getScreenCTM().inverse());
 
              [clicked.x, clicked.y] = transferBack(svgP.x, svgP.y, state.transform);
-             //    console.log('[' + e.clientX + 'x' + e.clientY + '] --> [' + clicked.x + 'x' + clicked.y + ']');
            } else if (canvasDrag) {
-            // const [dx, dy] = transferBack(e.clientX - canvasDrag[0], e.clientY - canvasDrag[1], state.transform);
              const [dx, dy] = [e.clientX - canvasDrag[0], e.clientY - canvasDrag[1]];
              const {zoom} = state.transform;
              state.transform.dx += dx*zoom;

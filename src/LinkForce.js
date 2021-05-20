@@ -1,5 +1,3 @@
-import {transfer} from './Canvas';
-
 const FLEXIBILITY = 3;
 
 function regular(link, node, p) {

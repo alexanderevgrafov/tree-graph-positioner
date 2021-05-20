@@ -2,7 +2,6 @@ import React from 'react-mvx';
 import {define, Record, type} from 'type-r';
 import {GraphModel} from './Graph';
 import {createContext} from 'react';
-import {transform} from 'type-r/lib/object-plus/tools';
 
 @define
 export class TransformModel extends Record {
@@ -28,7 +27,6 @@ export class AppState extends Record {
   constructor() {
     super();
 
-    //setTimeout(()=>this.graph.init(), 500);
     this.graph.init()
 
     this.onStartStop();
@@ -71,5 +69,5 @@ export class AppState extends Record {
   }
 }
 
-export const StateContext = createContext(null);
+//export const StateContext = createContext(null);
 export const TransformContext = createContext(null);
